@@ -109,8 +109,12 @@ function spcSetMeta($postId, $customField, $value)
 function spcGetImage($postId, $thumbnailType=SPC_THUMBNAIL_100x100)
 {
 	$post_thumbnail_id = get_post_thumbnail_id($postId);  
-	if ($post_thumbnail_id) {  
-		$post_thumbnail_img = wp_get_attachment_image_src($post_thumbnail_id, $thumbnailType);  
+	if ($post_thumbnail_id) 
+	{  
+		if ($thumbnailType == SPC_THUMBNAIL_100x100)
+			$post_thumbnail_img = wp_get_attachment_image_src($post_thumbnail_id, array(100,100)); 
+		else
+			$post_thumbnail_img = wp_get_attachment_image_src($post_thumbnail_id, $thumbnailType);  
 		return $post_thumbnail_img[0];  
 	}  		
 }
