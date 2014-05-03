@@ -42,7 +42,7 @@ function spcProductTypeInit()
 		'label'               => SPC_TYPE_PRODUCT,
 		'description'         => $product . ' ' . __( 'information pages', 'spc' ),
 		'labels'              => $labels,
-		'supports'            => array( 'title', 'editor', 'excerpt', 'thumbnail', 'post-thumbnails', 'comments', 'revisions', 'custom-fields', ),
+		'supports'            => array( 'title', 'editor', 'excerpt', 'thumbnail', 'post-thumbnails', 'comments', 'revisions', 'custom-fields', 'page-attributes'),
 		'taxonomies'          => array(),
 		'hierarchical'        => false,
 		'public'              => true,
