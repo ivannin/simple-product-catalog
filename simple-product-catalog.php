@@ -49,7 +49,7 @@ function spcInit()
 	add_option(SPC_OPTION_USE_QUANTITY, TRUE);			// Использовать количество товаров в каталоге
 	add_option(SPC_OPTION_USE_IMAGE, TRUE);				// Использовать изображения товаров в каталоге
 	add_option(SPC_OPTION_CURRENCY_SYMBOL, '');			// Символ валюты
-	add_option(SPC_OPTION_PRODUCT_SLUG, 'product');		// URL слаг продукта
+	add_option(SPC_OPTION_SLUG_PRODUCT, 'product');		// URL слаг продукта
 	add_option(SPC_OPTION_SLUG_SECTION, 'section');		// URL слаг раздела
 	add_option(SPC_OPTION_SLUG_STATUS, 'status');		// URL слаг раздела
 }
