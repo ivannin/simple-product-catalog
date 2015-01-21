@@ -151,6 +151,7 @@ function spcStatusTaxonomyInit()
 
 // ------------------------- Колонки в таблице -------------------------
 // Дополнительные колонки в таблице каталога
+define('STC_COLUMN_ORDER',	'colOrder');		// Порядок
 define('STC_COLUMN_SKU',	'colSKU');			// Артикул
 define('STC_COLUMN_PRICE',	'colPrice');		// Цена
 define('STC_COLUMN_QUO',	'colQUO');			// Количество на складе
@@ -180,6 +181,8 @@ function spcSetColumnsHead($defaults)
 		switch ($count)
 		{
 			case 2:
+				// Порядок
+				$result[STC_COLUMN_ORDER]	= '#';			
 				// Картинка
 				if (get_option(SPC_OPTION_USE_IMAGE))
 					$result[STC_COLUMN_IMAGE]	= __('Image', 'spc');
@@ -197,8 +200,6 @@ function spcSetColumnsHead($defaults)
 		}
 		$result[$key] = $value;
 	}
-
-
     return $result;  
 }  
   
@@ -207,6 +208,13 @@ function spcShowColumnsContent($column_name, $postId)
 {  
     switch ($column_name)
 	{
+		// Порядок
+		case STC_COLUMN_ORDER:
+			$thispost = get_post($postId);
+			$menu_order = $thispost->menu_order;			
+			echo $menu_order;
+			break;	
+			
 		// Артикул
 		case STC_COLUMN_SKU:
 			echo spcGetMeta($postId, __('SKU', 'spc'));
@@ -240,6 +248,7 @@ add_filter('manage_edit-' . SPC_TYPE_PRODUCT . '_sortable_columns', 'spcSortColu
 function spcSortColumns($columns) 
 {
 	$custom = array(
+		STC_COLUMN_ORDER 	=> STC_COLUMN_ORDER,
 		STC_COLUMN_SKU 		=> STC_COLUMN_SKU,
 		STC_COLUMN_PRICE 	=> STC_COLUMN_PRICE,
 		STC_COLUMN_QUO		=> STC_COLUMN_QUO,
@@ -286,8 +295,26 @@ function spcColumnsOrderby( $vars )
 			//'order' => 'asc' // don't use this; blocks toggle UI
 		));
 	}
+	
+	if ( isset( $vars['orderby'] ) && $vars['orderby'] == STC_COLUMN_ORDER) 
+	{
+		$vars = array_merge( $vars, array(
+			'orderby' => 'menu_order'
+			//'order' => 'asc' // don't use this; blocks toggle UI
+		));
+	}	
+	
+	// По умолчанию - по ORDERBY
+	if (!isset( $vars['orderby'])) 
+	{
+		$vars = array_merge( $vars, array(
+			'orderby' => 'menu_order',
+			'order' => 'asc' // don't use this; blocks toggle UI
+		));
+	}	
 	return $vars;
 }
+
 
 // Установка полей каталога при ручном добавлении
 add_action('wp_insert_post', 'spcSetProductDefaults');
@@ -311,6 +338,10 @@ function spcAdminIconCSS()
 <style type="text/css">
 	.icon32-posts-spc_product {
 		background: url('/wp-content/plugins/simple-product-catalog/img/product-icon-32x32.png') no-repeat !important;
+	}
+	#colOrder
+	{
+		width:50px;
 	}
 </style>
 <?php
