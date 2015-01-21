@@ -23,6 +23,13 @@ License:
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ================================================================================
 */
+// ---------------- Некоторые очень важные установки кэша ----------------
+define('SPC_CACHE_TIMEOUT',	60); 			// Время жизни объектов в кэше
+define('SPC_CACHE_GROUP',	'SPC'); 		// Группа для кэширования объектов
+define('SPC_CACHE_META',	'META'); 		// Ключ для хранения метаданных
+define('SPC_CACHE_POSTIDS',	'POST_IDS'); 	// Ключ для хранения ID постов и артикулов
+
+
 // ------------------------- Параметры -------------------------
 define('SPC_OPTION_PLUGIN_TITLE',		'spcPluginTitle');
 define('SPC_OPTION_CAPTION_PRODUCT',	'spcCaptionProduct');
@@ -87,13 +94,24 @@ function spcOptions()
 // ------------------------- Типы данных -------------------------
 require (plugin_dir_path(__FILE__) . 'post-type.php');
 
+// ------------------------- Шорткоды -------------------------
+require (plugin_dir_path(__FILE__) . 'shortcodes.php');
+
 
 // ------------------------- Общие функции -------------------------
 // Возвращает значение произвольных полей
 function spcGetMeta($postId, $customField) 
 {
-	$values = get_post_meta($postId, $customField);
-	if (count($values) == 0) 
+	$customField = trim($customField);
+	$key = SPC_CACHE_META . $postId . $customField;
+	$values = wp_cache_get($key, SPC_CACHE_GROUP);
+	if (! $values)
+	{
+		$values = get_post_meta($postId, $customField);
+		wp_cache_set($key, $values, SPC_CACHE_GROUP, SPC_CACHE_TIMEOUT);
+	}
+	
+	if (count($values) == 0)
 		return '';
 	else
 		return trim($values[0]);		
@@ -101,6 +119,9 @@ function spcGetMeta($postId, $customField)
 // Устанавливает значение произвольных полей
 function spcSetMeta($postId, $customField, $value) 
 {
+	$customField = trim($customField);
+	$key = SPC_CACHE_META . $postId . $customField;
+	wp_cache_delete($key, SPC_CACHE_GROUP);
 	add_post_meta($postId, $customField, $value, true) 
 		or update_post_meta($postId, $customField, $value);	
 }
