@@ -3,7 +3,7 @@
 Plugin Name: Simple Product Catalog
 Plugin URI: https://github.com/ivannin/simple-product-catalog
 Description: Каталог продуктов для Wordpress
-Version: 0.1
+Version: 0.22
 Author: Иван Никитин
 Author URI: http://ivannikitin.com
 License:

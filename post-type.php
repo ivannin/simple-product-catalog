@@ -303,15 +303,6 @@ function spcColumnsOrderby( $vars )
 			//'order' => 'asc' // don't use this; blocks toggle UI
 		));
 	}	
-	
-	// По умолчанию - по ORDERBY
-	if (!isset( $vars['orderby'])) 
-	{
-		$vars = array_merge( $vars, array(
-			'orderby' => 'menu_order',
-			'order' => 'asc' // don't use this; blocks toggle UI
-		));
-	}	
 	return $vars;
 }
 

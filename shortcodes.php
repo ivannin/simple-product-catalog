@@ -85,11 +85,12 @@ function spcGetPostIdBySKU($sku)
 			while ($my_query->have_posts())
 			{
 				$my_query->the_post();
-				$id = get_the_ID();
-				$sku = spcGetMeta($id, __('SKU', 'spc'));
-				if ($sku) $ids[$sku] = $id;
+				$currID = get_the_ID();
+				$currSKU = spcGetMeta($currID, __('SKU', 'spc'));
+				if ($currSKU) $ids[$currSKU] = $currID;
 			}	
-		wp_reset_query(); 
+		//wp_reset_query(); 
+		wp_reset_postdata();
 		
 		// Кэшируем массив
 		wp_cache_set(SPC_CACHE_POSTIDS, $ids, SPC_CACHE_GROUP, SPC_CACHE_TIMEOUT);
